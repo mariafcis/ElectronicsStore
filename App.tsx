@@ -9,10 +9,10 @@
  */
 
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import Navigation from './src/navigation/Navigation';
 
 const App = () => {
-  return <SafeAreaView></SafeAreaView>;
+  return <Navigation></Navigation>;
 };
 
 export default App;
