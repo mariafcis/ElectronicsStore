@@ -4,8 +4,13 @@ import Constants from '../Constants';
 import BackIcon from '../../assets/backIcon.svg';
 import CheckIcon from '../../assets/checkIcon.svg';
 import RoundButton from '../components/RoundButton';
+import {useNavigation} from '@react-navigation/native';
 
+const goToModelScreen = navigation => {
+  navigation.navigate('ModelScreen');
+};
 const PictureScreen = () => {
+  const navigation = useNavigation();
   const renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -22,7 +27,12 @@ const PictureScreen = () => {
     return (
       <View style={styles.body}>
         <RoundButton label="Asset Inventory" onPress={() => {}} />
-        <RoundButton label="Model" onPress={() => {}} />
+        <RoundButton
+          label="Model"
+          onPress={() => {
+            goToModelScreen(navigation);
+          }}
+        />
         <RoundButton label="Person" onPress={() => {}} />
       </View>
     );
