@@ -6,11 +6,19 @@ import {
   Text,
   FlatList,
   Dimensions,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 import Constants from '../Constants';
 import BackIcon from '../../assets/backIcon.svg';
+import {IModel} from '../models/model';
 
+const models: IModel[] = [
+  {id: 0, name: 'printer'},
+  {id: 1, name: 'lcd'},
+  {id: 2, name: 'laptop'},
+  {id: 3, name: 'inc'},
+];
 const ModelScreen = () => {
   const windowWidth = Dimensions.get('window').width;
   const renderHeader = () => {
@@ -22,9 +30,7 @@ const ModelScreen = () => {
     );
   };
 
-  const renderModelItem = ({item}) => {
-    console.log('renderModelItem', item);
-
+  const renderModelItem = ({item}: {item: IModel}) => {
     return (
       <TouchableOpacity
         style={{width: windowWidth * 0.5, alignItems: 'center'}}>
@@ -32,8 +38,17 @@ const ModelScreen = () => {
           style={[
             styles.modelItem,
             {width: windowWidth * 0.45, height: windowWidth * 0.45},
-          ]}></View>
-        <Text>{item}</Text>
+          ]}>
+          <Image
+            style={{
+              width: windowWidth * 0.45,
+              height: windowWidth * 0.45,
+              resizeMode: 'contain',
+            }}
+            source={Constants.Images[item.name]}
+          />
+        </View>
+        <Text>{item.name}</Text>
       </TouchableOpacity>
     );
   };
@@ -43,7 +58,8 @@ const ModelScreen = () => {
       <FlatList
         style={styles.flatList}
         numColumns={2}
-        data={['printer HS', 'LCD XS', 'Laptops', 'Printer Inc']}
+        data={models}
+        keyExtractor={(item, index) => `${item.id}`}
         renderItem={renderModelItem}></FlatList>
     );
   };
