@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -12,25 +12,16 @@ import Constants from '../Constants';
 import BackIcon from '../../assets/backIcon.svg';
 import ArrowUpIcon from '../../assets/arrowUpIcon.svg';
 import ArrowDownIcon from '../../assets/arrowDownIcon.svg';
-import {IModel} from '../models/model';
-import {useNavigation} from '@react-navigation/native';
-import {Hr} from '../components/Hr';
-import {Row} from '../components/Row';
+import { IModel } from '../models/model';
+import { useNavigation } from '@react-navigation/native';
+import { Hr } from '../components/Hr';
+import { Row } from '../components/Row';
 
-const model: IModel = {
-  id: 0,
-  name: 'printer',
-  code: 'Gt2000',
-  type: 'Hello1',
-  cost: 1000,
-  category: '123',
-  descripton: 'desc',
-  imageLink: '',
-};
-const DetailsScreen = () => {
+const DetailsScreen = (props) => {
   const navigation = useNavigation();
   const [showModelInfo, setShowModelInfo] = useState(true);
 
+  const model = props.route.params.model;
   const goBack = () => navigation.goBack();
   const windowWidth = Dimensions.get('window').width;
   const renderHeader = () => {
@@ -93,7 +84,7 @@ const DetailsScreen = () => {
 
   const renderModelInfo = () => {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         {renderSectionTitle('Image Info')}
         {showModelInfo ? renderModelInfoDetails() : null}
       </View>
