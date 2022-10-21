@@ -9,7 +9,9 @@ export interface IModel {
   imageLink: string;
 }
 
-export interface IModelLite {
+export interface INote {
   id: number;
-  name: string;
+  username: string;
+  date: string;
+  details: string;
 }
