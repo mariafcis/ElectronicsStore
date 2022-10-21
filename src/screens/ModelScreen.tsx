@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Constants from '../Constants';
-import BackIcon from '../../assets/backIcon.svg';
 import { IModel } from '../models/model';
 import { useNavigation } from '@react-navigation/native';
 import { createTable, getDBConnection, getModelItems, saveModelItems } from '../services/db-service';
+import Header from '../components/Header';
 
 const ModelScreen = () => {
   const windowWidth = Dimensions.get('window').width;
@@ -24,55 +24,14 @@ const ModelScreen = () => {
 
   const loadDataCallback = useCallback(async () => {
     try {
-      const initModels = [
-        {
-          id: 0,
-          name: 'printer',
-          code: 'Gt2000',
-          type: 'Hello1',
-          cost: 1000,
-          category: '123',
-          descripton: 'desc',
-          imageLink: '',
-        }, {
-          id: 1,
-          name: 'lcd',
-          code: 'Gt2000',
-          type: 'Hello1',
-          cost: 1000,
-          category: '123',
-          descripton: 'desc',
-          imageLink: '',
-        },
-        {
-          id: 2,
-          name: 'laptop',
-          code: 'Gt2000',
-          type: 'Hello1',
-          cost: 1000,
-          category: '123',
-          descripton: 'desc',
-          imageLink: '',
-        },
-        {
-          id: 3,
-          name: 'inc',
-          code: 'Gt2000',
-          type: 'Hello1',
-          cost: 1000,
-          category: '123',
-          descripton: 'desc',
-          imageLink: '',
-        }];
-
       const db = await getDBConnection();
       await createTable(db);
       const storedModelItems = await getModelItems(db);
       if (storedModelItems.length) {
         setModels(storedModelItems);
       } else {
-        await saveModelItems(db, initModels);
-        setModels(initModels);
+        await saveModelItems(db, Constants.initModels);
+        setModels(Constants.initModels);
       }
     } catch (error) {
       console.error(error);
@@ -86,16 +45,6 @@ const ModelScreen = () => {
   const goBack = () => navigation.goBack();
   const goToModelDetailsScreen = (model: IModel) => {
     navigation.navigate('ModelDetailsScreen', { model: model });
-  };
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <TouchableOpacity onPress={goBack}>
-          <BackIcon />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Model</Text>
-      </View>
-    );
   };
 
   const renderModelItem = ({ item }: { item: IModel }) => {
@@ -135,7 +84,7 @@ const ModelScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
+      <Header title={'Model'} goBack={goBack} />
       {renderBody()}
     </SafeAreaView>
   );
@@ -146,18 +95,6 @@ export default ModelScreen;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Constants.Background_Color,
-  },
-  header: {
-    height: 55,
-    backgroundColor: Constants.Header_Color,
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-  },
-  headerText: {
-    color: '#4E4E4E',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   modelItem: {
     backgroundColor: 'white',

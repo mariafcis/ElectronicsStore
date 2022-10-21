@@ -1,5 +1,4 @@
 export default {
-  ////Styles////
 
   //Colors
   Background_Color: '#F4F4F4',
@@ -14,4 +13,45 @@ export default {
     printer: require('../assets/images/printer.png'),
     lcd: require('../assets/images/lcd.png'),
   },
+
+  initModels: [
+    {
+      id: 0,
+      name: 'printer',
+      code: 'Gt2000',
+      type: 'Hello1',
+      cost: 1000,
+      category: '123',
+      descripton: 'desc',
+      imageLink: '',
+    }, {
+      id: 1,
+      name: 'lcd',
+      code: 'Gt2000',
+      type: 'Hello1',
+      cost: 1000,
+      category: '123',
+      descripton: 'desc',
+      imageLink: '',
+    },
+    {
+      id: 2,
+      name: 'laptop',
+      code: 'Gt2000',
+      type: 'Hello1',
+      cost: 1000,
+      category: '123',
+      descripton: 'desc',
+      imageLink: '',
+    },
+    {
+      id: 3,
+      name: 'inc',
+      code: 'Gt2000',
+      type: 'Hello1',
+      cost: 1000,
+      category: '123',
+      descripton: 'desc',
+      imageLink: '',
+    }]
 };
