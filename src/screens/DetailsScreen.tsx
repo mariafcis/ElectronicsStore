@@ -11,7 +11,6 @@ import {
   TextInput
 } from 'react-native';
 import Constants from '../Constants';
-import BackIcon from '../../assets/backIcon.svg';
 import ArrowUpIcon from '../../assets/arrowUpIcon.svg';
 import ArrowDownIcon from '../../assets/arrowDownIcon.svg';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +20,7 @@ import { INote } from '../models/model';
 import { FlatList } from 'react-native-gesture-handler';
 import SaveIcon from '../../assets/save.svg';
 import { createTable, getDBConnection, getNoteItems, saveNoteItems } from '../services/notes-db-service';
+import Header from '../components/Header';
 
 const DetailsScreen = (props) => {
   const navigation = useNavigation();
@@ -48,16 +48,6 @@ const DetailsScreen = (props) => {
   useEffect(() => {
     loadDataCallback();
   }, [loadDataCallback]);
-  const renderHeader = () => {
-    return (
-      <View style={styles.header}>
-        <TouchableOpacity onPress={goBack}>
-          <BackIcon />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Model Details</Text>
-      </View>
-    );
-  };
 
   const onSave = async () => {
     let note: INote = { id: notes.length, username: 'Maria Nabil', date: new Date().toLocaleString(), details: newNote }
@@ -192,7 +182,7 @@ const DetailsScreen = (props) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
+      <Header title={'Model Details'} goBack={goBack} />
       {renderBody()}
     </SafeAreaView>
   );
@@ -204,18 +194,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Constants.Background_Color,
     flex: 1,
-  },
-  header: {
-    height: 55,
-    backgroundColor: Constants.Header_Color,
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-  },
-  headerText: {
-    color: '#4E4E4E',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   image: {
     backgroundColor: 'white',
