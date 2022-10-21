@@ -6,27 +6,22 @@ import {
   Text,
   Dimensions,
   Image,
-  TouchableOpacity,
   ScrollView,
-  TextInput
 } from 'react-native';
 import Constants from '../Constants';
-import ArrowUpIcon from '../../assets/arrowUpIcon.svg';
-import ArrowDownIcon from '../../assets/arrowDownIcon.svg';
 import { useNavigation } from '@react-navigation/native';
 import { Hr } from '../components/Hr';
 import { Row } from '../components/Row';
 import { INote } from '../models/model';
-import { FlatList } from 'react-native-gesture-handler';
-import SaveIcon from '../../assets/save.svg';
 import { createTable, getDBConnection, getNoteItems, saveNoteItems } from '../services/notes-db-service';
 import Header from '../components/Header';
+import { SectionTitle } from '../components/SectionTitle';
+import { NotesSection } from '../components/NotesSection';
+import { ModelSection } from '../components/ModelSection';
 
 const DetailsScreen = (props) => {
   const navigation = useNavigation();
   const [showModelInfo, setShowModelInfo] = useState(true);
-  const [showModelNotes, setShowModelNotes] = useState(true);
-  const [newNote, setNewNote] = useState(null);
   const [notes, setNotes] = useState<INote[]>([]);
 
   const model = props.route.params.model;
@@ -49,11 +44,10 @@ const DetailsScreen = (props) => {
     loadDataCallback();
   }, [loadDataCallback]);
 
-  const onSave = async () => {
+  const onSave = async (newNote: string) => {
     let note: INote = { id: notes.length, username: 'Maria Nabil', date: new Date().toLocaleString(), details: newNote }
     const db = await getDBConnection();
     await saveNoteItems(db, [note])
-    setNewNote(null)
     loadDataCallback()
   }
 
@@ -69,17 +63,6 @@ const DetailsScreen = (props) => {
           source={Constants.Images[model.name]}
         />
       </View>
-    );
-  };
-
-  const renderSectionTitle = (title: string, onPress: () => void) => {
-    return (
-      <Row>
-        <Text style={styles.headerText}>{title}</Text>
-        <TouchableOpacity onPress={onPress}>
-          {showModelInfo ? <ArrowDownIcon /> : <ArrowUpIcon />}
-        </TouchableOpacity>
-      </Row>
     );
   };
 
@@ -104,79 +87,23 @@ const DetailsScreen = (props) => {
     );
   };
 
-  const renderOneNote = ({ item }: { item: INote }) => {
-    return (
-      <View>
-        <Text style={styles.username}>
-          {item.username}
-        </Text>
-        <Text>
-          {item.date}
-        </Text>
-        <Text>
-          {item.details}
-        </Text>
-      </View>
-    )
-  }
-
-  const renderHistoryNotesHeader = () => <Text style={styles.historyNotes}>  History Notes</Text>
-  const renderModelNotesDetails = () => {
-    return (
-      <View style={styles.historyNotes}>
-        {renderNotesInput()}
-        {renderHistoryNotesHeader()}
-        <FlatList style={styles.notesList} data={notes} renderItem={renderOneNote} keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={<Hr />}
-        />
-      </View>
-    );
-  };
-
   const renderModelInfo = () => {
     return (
       <View style={styles.section}>
-        {renderSectionTitle('Image Info', () => setShowModelInfo(!showModelInfo))}
+        <SectionTitle title='Image Info' onPress={() => setShowModelInfo(!showModelInfo)} showInfo={showModelInfo} />
         {showModelInfo ? renderModelInfoDetails() : null}
       </View>
     );
   };
-
-  const renderNotesInput = () => {
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        <TextInput
-          value={newNote}
-          onChangeText={(text) => setNewNote(text)}
-          style={styles.notesInput}
-          placeholder={'Add a note'}
-        ></TextInput>
-        <TouchableOpacity style={{ marginStart: 10, justifyContent: 'center' }}
-          onPress={onSave}
-        >
-          <SaveIcon />
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
-  const renderModelNotes = () => {
-    return (
-      <View style={styles.section}>
-        {renderSectionTitle("Notes", () => setShowModelNotes(!showModelNotes))}
-        {showModelNotes ? renderModelNotesDetails() : null}
-
-      </View>
-    )
-  }
   const renderBody = () => {
     return (
       <ScrollView style={styles.body}>
         {renderImage()}
         <Hr />
-        {renderModelInfo()}
+        {/* {renderModelInfo()} */}
+        <ModelSection model={model} />
         <Hr />
-        {renderModelNotes()}
+        <NotesSection onSaveNotes={onSave} notes={notes} />
       </ScrollView>
     );
   };
@@ -213,23 +140,4 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 20
   },
-  notesList: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 20,
-    marginTop: 5
-  },
-  username: {
-    fontWeight: 'bold', color: Constants.Text_Color
-  },
-  historyNotes: {
-    marginTop: 10,
-    color: Constants.Text_Color,
-  },
-  notesInput: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    flex: 1
-  }
 });
